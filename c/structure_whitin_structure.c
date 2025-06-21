@@ -20,8 +20,11 @@ int main() {
   char name[10] = "Xavier";
   int age = 18;
 
-  struct Persona* persona1 = (struct Persona*)malloc(sizeof(struct Persona));
- // struct Fecha* birthdate_one = (struct Fecha*)malloc(sizeof(struct Fecha));
+  struct Persona* persona1 = (struct Persona*)malloc(sizeof(struct Persona)); // Solo asingna memoria suficiente para nombre, edad y el puntero cumpleaños pero no para lo que apunta cumpleaños solo un puntero en si
+                                                                              
+  // struct Fecha* birthdate_one = (struct Fecha*)malloc(sizeof(struct Fecha));
+
+  persona1->birthdate = (struct Fecha*)malloc(sizeof(struct Fecha)); // Asignar memoria para el birthdate
 
   persona1->name = name;
   persona1->age = age;
@@ -35,6 +38,8 @@ int main() {
   printf("Edad: %d \n", persona1->age);
   printf("Cumpleannos: %d/%d/%d", persona1->birthdate->day, persona1->birthdate->month, persona1->birthdate->year);
 
+  // liberar memoraia, primero el interior de persona luego ya persona completa
+  free(persona1->birthdate);
   free(persona1);
   //free(birthdate_one);
 
