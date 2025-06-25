@@ -12,7 +12,6 @@ void sumArr(int *size, int *arr) {
 }
 
 int main() {
-
   int size_arr = 5;
   int arr[5] = {2, 3, 5, 8, 9};
 
