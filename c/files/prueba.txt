@@ -1,0 +1,7 @@
+hola mundo
+como estan
+mi nombre es x, tengo x edad y x trabajo
+
+22 dias
+18 años
+55 minutos
