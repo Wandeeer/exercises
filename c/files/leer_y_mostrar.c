@@ -4,7 +4,7 @@ int main()
 {
     char line[256];
 
-    FILE *file = fopen("prueba.txt", "r");
+    FILE *file = fopen("files/prueba.txt", "r");
 
     // Verificar si el archivo esta bien
     if (file == NULL)
