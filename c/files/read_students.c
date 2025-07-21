@@ -49,6 +49,7 @@ int main()
     }
     // Escribir datos en un archivo binario
     elements_written = fwrite(group_students, sizeof(struct Student), stds, file);
+    fclose(file);
 
     if (elements_written != stds)
     {
@@ -56,23 +57,36 @@ int main()
     }
 
     // Leer datos del archivo
-    bytes_leidos = fread(buffer, sizeof(struct Student), stds, file);
+    struct Student read_stds[stds];
+    file = fopen("data.bin", "rb");
+    if (file == NULL)
+    {
+        printf("Erro al leer el archivo... \n");
+        return 1;
+    }
+
+    bytes_leidos = fread(read_stds, sizeof(struct Student), stds, file);
+    fclose(file);
 
     // Comprobacion
     if (bytes_leidos < stds)
     {
         if (feof(file))
         {
-            printf("Fin del archivo alcanzado");
+            printf("Fin del archivo alcanzado \n");
         }
         else if (ferror(file))
         {
-            printf("Error al leer su archivo");
+            printf("Error al leer su archivo \n");
         }
     }
 
-    printf("Se leyeron %zu elementos. \n", bytes_leidos);
+    printf("\nEstudiantes leidos del archivo\n");
+    for (int i = 0; i < bytes_leidos; i++)
+    {
+        printf("Nombre: %s, Edad: %d, Promedio: %.2f\n",
+               read_stds[i].name, read_stds[i].age, read_stds[i].prom);
+    }
 
-    fclose(file);
     return 0;
 }

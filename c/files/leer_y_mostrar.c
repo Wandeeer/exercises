@@ -14,6 +14,7 @@ int main()
     }
 
     // Almacena cada linea leidad del archivo file y lo almacena en line
+    // Al final del archivo devuelve NULL
     while ((fgets(line, sizeof(line), file)) != NULL)
     {
         // Se imprime cada linea del archivo
