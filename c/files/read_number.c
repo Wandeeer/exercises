@@ -5,8 +5,6 @@ int main()
 {
     FILE *file;
     size_t elements_written;
-    size_t bytes_read;
-    char buffer[5];
 
     int numbers[] = {2, 9, 4, 3, 2, 0};
     int size_numbers = sizeof(numbers) / sizeof(numbers[0]);
@@ -29,13 +27,14 @@ int main()
         return 1;
     }
 
-    int num;
-    int index = 1;
-    fseek(file, 0, SEEK_END);
-    while (fread(&num, sizeof(int), 1, file))
+    int *nums = malloc(size_numbers * sizeof(int));
+    fseek(file, 0, SEEK_SET);
+    fread(nums, sizeof(int), size_numbers, file);
+
+    // Recorrer hacia atras
+    for (int i = size_numbers - 1; i >= 0; i--)
     {
-        printf("Pocision %d valor: %d\n", size_numbers - index, num);
-        index++;
+        printf("Valor de %d : %d \n", i, nums[i]);
     }
 
     fclose(file);
