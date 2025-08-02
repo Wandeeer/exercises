@@ -1,5 +1,7 @@
 #include <stdio.h>
 
+
+
 void read_notebook(FILE *f) {
     f = fopen("files/notebook.txt", "r");
     if (f == NULL) {
@@ -8,7 +10,7 @@ void read_notebook(FILE *f) {
     }
     char text[50];
     while(fgets(text, sizeof(text), f) != NULL) {
-        printf("\n\n%s\n", text);
+        printf("%s", text);
     }
 
     fclose(f);
@@ -28,23 +30,36 @@ int main()
         
         switch(opt) {
             case 1: {
-                
-                file = fopen("files/notebook.txt", "w");
-
-                if(file == NULL) {
-                    printf("Error al abrir el archivo...");
-                    return 1;
-                }
-
-                printf("Proceda a escribir Sr\n\n");
-
-                char text[50];
-                getchar();
-                fgets(text, sizeof(text), stdin);
-
-                fprintf(file, "%s", text);
+            
+                file = fopen("files/notebook.txt", "r"); 
+                fseek(file, 0, SEEK_END);
+                long size_file = ftell(file);
                 fclose(file);
-                break;
+                char text[50];
+                if(size_file > 0) {
+
+                    printf("Recuperando archivo proceda a escribir...\n\n");
+                    file = fopen("files/notebook.txt", "a");
+                    getchar();
+                    fgets(text, sizeof(text), stdin);
+                    fprintf(file, "%s", text);
+                    fclose(file);
+
+                    break; 
+                } else {
+                    printf("Creando nuevo archivo \n\n");
+                    file = fopen("files/notebook.txt", "w");
+                    if(file == NULL) {
+                        printf("Algo salio mal");
+                        return 1;
+                    }
+                    read_notebook(file);
+                    fgets(text, sizeof(text), stdin); 
+                    fprintf(file, "%s", text);
+                    fclose(file);
+                    break;
+
+                }
             }
 
             case 2:
