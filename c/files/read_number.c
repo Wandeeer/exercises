@@ -15,7 +15,6 @@ int main()
         printf("Error al abrir el archivo... \n");
         return 1;
     }
-a
     elements_written = fwrite(numbers, sizeof(int), size_numbers, file);
     fclose(file);
 
