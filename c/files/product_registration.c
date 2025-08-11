@@ -8,7 +8,6 @@ struct Product
 
 void create_new_product(FILE *f, char *db_name, char *name_item, int id_item)
 {
-
     struct Product new;
     new.ID = id_item;
     // Copiamos la cadena de caracteres
@@ -23,7 +22,6 @@ void create_new_product(FILE *f, char *db_name, char *name_item, int id_item)
     if (f == NULL)
     {
         printf("Error al abrir el archivo");
-        fclose(f);
         return;
     }
 
@@ -36,7 +34,7 @@ void create_new_product(FILE *f, char *db_name, char *name_item, int id_item)
 
     fclose(f);
 }
-void read_item(FILE *f, char *db_name)
+void read_item_and_search(FILE *f, char *db_name, int id, int search_id)
 {
 
     f = fopen(db_name, "rb");
@@ -52,17 +50,42 @@ void read_item(FILE *f, char *db_name)
 
     if (size_file > 0)
     {
+
         f = fopen(db_name, "rb");
         struct Product group_elements[size_file];
 
         size_t read_bytes = fread(group_elements, sizeof(struct Product), size_file, f);
 
-        printf("\nLista de Productos: \n");
-        for (int i = 0; i < read_bytes; i++)
+        if (search_id == 1)
         {
-            printf("\nID : %d\nNombre : %s\n", group_elements[i].ID, group_elements[i].name);
+            for (int i = 0; i < read_bytes; i++)
+            {
+                if (id == group_elements[i].ID)
+                {
+                    printf("\n--------- Producto encontrado ---------\n");
+                    printf("\nID : %d\nProducto : %s\n", group_elements[i].ID, group_elements[i].name);
+                    printf("---------------------------------------\n");
+                    fclose(f);
+                    break;
+                }
+                else if (id > read_bytes || id <= 0)
+                {
+                    printf("\nProducto no encontrado o el id no existe... \n");
+                    fclose(f);
+                    break;
+                    return;
+                }
+            }
         }
-        fclose(f);
+        else
+        {
+            printf("\nLista de Productos: \n");
+            for (int i = 0; i < read_bytes; i++)
+            {
+                printf("\nID : %d\nProducto : %s\n", group_elements[i].ID, group_elements[i].name);
+            }
+            fclose(f);
+        }
     }
     else
     {
@@ -80,13 +103,15 @@ int main()
     int exit = 0;
     int opt;
 
+    int search, num;
+
     char name_product[100];
     int ID = 0;
 
     while (exit == 0)
     {
         printf("\n---------------Menu de productos--------------\n\n");
-        printf("1 : Agregar\n2 : Ver\n3 : Salir\n");
+        printf("1 : Agregar\n2 : Ver\n3 : Buscar\n4 : Salir\n");
         scanf("%d", &opt);
 
         switch (opt)
@@ -96,18 +121,23 @@ int main()
             printf("\nIngrese a continuacion el nombre de su producto: ");
             getchar();
             fgets(name_product, sizeof(name_product), stdin);
-            if (ID >= 0)
-            {
-                ID += 1;
-            }
+            ID += 1;
             create_new_product(file, name_archive, name_product, ID);
             break;
         }
         case 2:
-            read_item(file, name_archive);
+            search = 0;
+            num = 0;
+            read_item_and_search(file, name_archive, num, search);
             break;
 
         case 3:
+            search = 1;
+            printf("\nIngrese el ID del produco que desea buscar: ");
+            scanf("%d", &num);
+            read_item_and_search(file, name_archive, num, search);
+            break;
+        case 4:
             printf("\nSaliendo...\n");
             exit = 1;
             break;
